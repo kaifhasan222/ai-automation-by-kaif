@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=720, height=1280" />
+    <title>Voxtral news</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Anton";
+        src: local("Anton");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "SF Pro Text";
+        src: local("SF Pro Text"), local("Helvetica Neue");
+        font-weight: 400;
+        font-style: normal;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #080b12;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #080b12;
+      }
+      .mesh-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #080b12;
+        z-index: 0;
+      }
+      .mesh {
+        position: absolute;
+        inset: -22%;
+        filter: blur(44px);
+        opacity: 0.9;
+        background:
+          radial-gradient(circle at var(--hf-x1, 20%) var(--hf-y1, 30%), #60a5fa 0 18%, transparent 34%),
+          radial-gradient(circle at var(--hf-x2, 76%) var(--hf-y2, 52%), #f472b6 0 16%, transparent 34%),
+          radial-gradient(circle at var(--hf-x3, 46%) var(--hf-y3, 78%), #34d399 0 18%, transparent 34%);
+      }
+      .kicker {
+        position: absolute;
+        top: 36px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
+        font-family: "SF Pro Text", "Helvetica Neue", sans-serif;
+        font-size: 18px;
+        letter-spacing: 0.28em;
+        color: #f5f5f7;
+      }
+      .zoom {
+        position: absolute;
+        left: 28px;
+        top: 88px;
+        width: 664px;
+        height: 760px;
+        border-radius: 36px;
+        overflow: hidden;
+        transform-origin: 50% 28%;
+        z-index: 2;
+      }
+      .zoom video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 16%;
+      }
+      .hero {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        background: #080b12;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .hero-in {
+        font-family: "Anton", sans-serif;
+        font-size: 128px;
+        line-height: 0.9;
+        letter-spacing: 0.02em;
+        color: #fff;
+        text-transform: uppercase;
+        padding: 0 36px;
+      }
+      .hero-in span { display: block; color: #ffd700; font-size: 72px; margin-top: 12px; }
+      .card {
+        position: absolute;
+        left: 36px;
+        right: 36px;
+        top: 900px;
+        z-index: 8;
+        border-radius: 28px;
+        padding: 28px 24px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        text-align: center;
+      }
+      .card-in {
+        font-family: "Anton", sans-serif;
+        font-size: 54px;
+        line-height: 1;
+        letter-spacing: 0.04em;
+        color: #fff;
+        text-transform: uppercase;
+      }
+      .card-in span { display: block; color: #ffd700; margin-top: 8px; }
+      .kt-word {
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        color: #fff;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        top: 920px;
+        letter-spacing: 0.03em;
+        line-height: 0.95;
+        z-index: 8;
+        opacity: 0;
+        text-shadow: 0 8px 28px rgba(0, 0, 0, 0.9);
+      }
+      .plate {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        background: #080b12;
+      }
+      .plate .line {
+        position: absolute;
+        left: 48px;
+        right: 48px;
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        font-size: 72px;
+        line-height: 0.95;
+        color: #fff;
+        opacity: 0;
+      }
+      #e1 { top: 220px; font-size: 42px; letter-spacing: 0.18em; }
+      #e2 { top: 300px; color: #ffd700; font-size: 86px; }
+      #e3 { top: 420px; }
+      #e4 { top: 530px; font-size: 48px; color: #ffd700; }
+      .pip {
+        position: absolute;
+        left: 262px;
+        bottom: 140px;
+        width: 196px;
+        height: 196px;
+        border-radius: 98px;
+        overflow: hidden;
+        z-index: 9;
+        border: 4px solid #f5f5f7;
+        background: #1c1c1e;
+        opacity: 0;
+      }
+      .pip video {
+        width: 196px;
+        height: 196px;
+        object-fit: cover;
+        object-position: center 16%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30.56" data-width="720" data-height="1280">
+      <div class="mesh-bg" id="mesh-bg" data-layout-allow-overflow>
+        <div class="mesh" id="mesh"></div>
+      </div>
+      <div class="kicker">NEW KAIF AI</div>
+
+      <div id="z1a" class="zoom" data-layout-allow-overflow>
+        <video id="v1a" class="clip" src="assets/01.mp4" playsinline data-has-audio="true" data-start="0" data-duration="0.6" data-media-start="1.05" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z1b" class="zoom" data-layout-allow-overflow>
+        <video id="v1b" class="clip" src="assets/01.mp4" playsinline data-has-audio="true" data-start="0.6" data-duration="5.03" data-media-start="2.05" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z2a" class="zoom" data-layout-allow-overflow>
+        <video id="v2a" class="clip" src="assets/02.mp4" playsinline data-has-audio="true" data-start="5.63" data-duration="0.6" data-media-start="1.05" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z2b" class="zoom" data-layout-allow-overflow>
+        <video id="v2b" class="clip" src="assets/02.mp4" playsinline data-has-audio="true" data-start="6.23" data-duration="4.08" data-media-start="2.04" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z3" class="zoom" data-layout-allow-overflow>
+        <video id="v3" class="clip" src="assets/03.mp4" playsinline data-has-audio="true" data-start="10.31" data-duration="5.08" data-media-start="1.04" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z4" class="zoom" data-layout-allow-overflow>
+        <video id="v4" class="clip" src="assets/04.mp4" playsinline data-has-audio="true" data-start="15.39" data-duration="5.07" data-media-start="1.05" data-track-index="0" data-volume="1"></video>
+      </div>
+      <div id="z5" class="zoom" data-layout-allow-overflow>
+        <video id="v5" class="clip" src="assets/05.mp4" playsinline data-has-audio="true" data-start="20.46" data-duration="5.05" data-media-start="1.05" data-track-index="0" data-volume="1"></video>
+      </div>
+
+      <div id="kt-container"></div>
+
+      <div id="card-call" class="clip card" data-start="6.23" data-duration="4.08" data-track-index="2">
+        <div class="card-in" id="card-call-in">Sunta sochta<span>ek hi call</span></div>
+      </div>
+      <div id="hero-50" class="clip hero" data-start="10.31" data-duration="1.7" data-track-index="2">
+        <div class="hero-in" id="hero-50-in">50+<span>bhasha</span></div>
+      </div>
+      <div id="hero-sec" class="clip hero" data-start="15.39" data-duration="1.7" data-track-index="2">
+        <div class="hero-in" id="hero-sec-in">1 sec<span>se kam</span></div>
+      </div>
+      <div id="hero-api" class="clip hero" data-start="20.46" data-duration="1.7" data-track-index="2">
+        <div class="hero-in" id="hero-api-in">API<span>ya apna server</span></div>
+      </div>
+
+      <div id="plate-close" class="clip plate" data-start="25.51" data-duration="5.05" data-track-index="3">
+        <div class="line" id="e1">YouTube</div>
+        <div class="line" id="e2">New Kaif AI</div>
+        <div class="line" id="e3">Subscribe</div>
+        <div class="line" id="e4">Instagram follow</div>
+      </div>
+      <div class="pip" id="pip" data-layout-allow-overflow>
+        <video id="v6" class="clip" src="assets/06.mp4" playsinline data-has-audio="true" data-start="25.51" data-duration="5.05" data-media-start="1.05" data-track-index="0" data-volume="1"></video>
+      </div>
+
+      <audio id="w1" class="clip" src="assets/whoosh.mp3" data-start="0" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="w2" class="clip" src="assets/whoosh.mp3" data-start="5.63" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="w3" class="clip" src="assets/whoosh.mp3" data-start="10.31" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="w4" class="clip" src="assets/whoosh.mp3" data-start="15.39" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="w5" class="clip" src="assets/whoosh.mp3" data-start="20.46" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="w6" class="clip" src="assets/whoosh.mp3" data-start="25.51" data-duration="0.6" data-track-index="4" data-volume="0.32"></audio>
+      <audio id="p6" class="clip" src="assets/pop.mp3" data-start="26.35" data-duration="0.5" data-track-index="5" data-volume="0.45"></audio>
+      <audio id="bed" class="clip" src="assets/bgm.wav" data-start="0" data-duration="30.56" data-track-index="6" data-volume="0.12"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", {
+        "--hf-x1": "18%", "--hf-y1": "22%", "--hf-x2": "80%", "--hf-y2": "40%", "--hf-x3": "40%", "--hf-y3": "82%"
+      }, {
+        "--hf-x1": "36%", "--hf-y1": "48%", "--hf-x2": "58%", "--hf-y2": "66%", "--hf-x3": "62%", "--hf-y3": "58%",
+        duration: 15, ease: "sine.inOut", yoyo: true, repeat: 1
+      }, 0);
+
+      [
+        ["#z1a", 0, 0.6],
+        ["#z1b", 0.6, 5.03],
+        ["#z2a", 5.63, 0.6],
+        ["#z2b", 6.23, 4.08],
+        ["#z3", 10.31, 5.08],
+        ["#z4", 15.39, 5.07],
+        ["#z5", 20.46, 5.05]
+      ].forEach(function (row) {
+        tl.fromTo(row[0], { scale: 1 }, { scale: 1.06, duration: row[2], ease: "power1.out" }, row[1]);
+      });
+
+      ["#card-call-in", "#hero-50-in", "#hero-sec-in", "#hero-api-in"].forEach(function (id, i) {
+        const at = [6.23, 10.31, 15.39, 20.46][i];
+        tl.fromTo(id, { scale: 0.82, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.6)" }, at);
+      });
+
+      const WORDS = [
+        { text: "NAYI", start: 0.04, end: 0.55 },
+        { text: "KHABAR", start: 0.62, end: 1.45 },
+        { text: "MISTRAL", start: 1.55, end: 2.55 },
+        { text: "VOXTRAL 3", start: 2.65, end: 4.15, gold: true },
+        { text: "AI AGENT", start: 4.25, end: 5.5, gold: true }
+      ];
+      const box = document.getElementById("kt-container");
+      const fit = document.createElement("canvas").getContext("2d");
+      WORDS.forEach(function (w, wi) {
+        const el = document.createElement("div");
+        el.className = "kt-word";
+        el.id = "kt-w-" + wi;
+        el.textContent = w.text;
+        let size = 120;
+        fit.font = "400 " + size + "px Anton, sans-serif";
+        while (size > 64 && fit.measureText(w.text).width > 640) {
+          size -= 4;
+          fit.font = "400 " + size + "px Anton, sans-serif";
+        }
+        el.style.fontSize = size + "px";
+        if (w.gold) el.style.color = "#FFD700";
+        box.appendChild(el);
+        const mode = wi % 4;
+        if (mode === 0) {
+          tl.fromTo(el, { y: -80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(1.7)" }, w.start);
+        } else if (mode === 1) {
+          tl.fromTo(el, { x: -220, opacity: 0 }, { x: 0, opacity: 1, duration: 0.18, ease: "expo.out" }, w.start);
+        } else if (mode === 2) {
+          tl.fromTo(el, { x: 220, opacity: 0 }, { x: 0, opacity: 1, duration: 0.18, ease: "expo.out" }, w.start);
+        } else {
+          tl.fromTo(el, { scale: 0.45, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2)" }, w.start);
+        }
+        tl.to(el, { opacity: 0, duration: 0.1, ease: "power2.in" }, w.end);
+      });
+
+      tl.fromTo("#e1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 25.7);
+      tl.fromTo("#e2", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "power4.out" }, 26.35);
+      tl.fromTo("#e3", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18, ease: "power4.out" }, 27.15);
+      tl.fromTo("#e4", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18, ease: "power4.out" }, 28.05);
+      tl.fromTo("#pip", { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power3.out" }, 25.7);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

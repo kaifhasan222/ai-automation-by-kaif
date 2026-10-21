@@ -1,0 +1,1 @@
+"""Daily AI video factory — Mac + Telegram + OpenRouter (free-first)."""

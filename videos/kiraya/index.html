@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="hi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=720, height=1280" />
+    <title>Kiraya</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Kohinoor Devanagari";
+        src: local("Kohinoor Devanagari"), local("KohinoorDevanagari-Regular");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Kohinoor Devanagari";
+        src: local("Kohinoor Devanagari Bold"), local("KohinoorDevanagari-Bold");
+        font-weight: 700;
+        font-style: normal;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 720px;
+        height: 1280px;
+        overflow: hidden;
+        background: #1a1410;
+        color: #f3eadb;
+        font-family: "Kohinoor Devanagari", sans-serif;
+      }
+      #root { position: relative; width: 720px; height: 1280px; overflow: hidden; background: #1a1410; }
+      .stage { position: absolute; inset: 0; overflow: hidden; }
+      .zoom { position: absolute; inset: 0; transform-origin: 50% 42%; }
+      video.clip {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 720px;
+        height: 1280px;
+        object-fit: cover;
+      }
+      .card {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 0 64px 280px;
+        background: #1a1410;
+      }
+      .card h2 {
+        font-family: "Kohinoor Devanagari", sans-serif;
+        font-weight: 700;
+        font-size: 132px;
+        line-height: 0.9;
+        letter-spacing: 0.01em;
+        color: #f3eadb;
+      }
+      .card p {
+        margin-top: 18px;
+        font-size: 40px;
+        line-height: 1.25;
+        color: #d7a15a;
+      }
+      .rule {
+        width: 120px;
+        height: 3px;
+        background: #d7a15a;
+        margin-bottom: 28px;
+        transform-origin: left center;
+      }
+      .cap {
+        position: absolute;
+        left: 40px;
+        right: 40px;
+        bottom: 200px;
+        z-index: 4;
+      }
+      .cap span {
+        display: inline-block;
+        background: rgba(26, 20, 16, 0.86);
+        color: #f3eadb;
+        font-size: 42px;
+        font-weight: 700;
+        line-height: 1.25;
+        padding: 14px 18px;
+        border-radius: 6px;
+      }
+      .en {
+        font-family: "League Gothic", Oswald, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="27.83"
+      data-width="720"
+      data-height="1280"
+    >
+      <div class="stage">
+        <div id="z-tea" class="zoom" data-layout-allow-overflow>
+          <video id="tea" class="clip" src="assets/01_tea.mp4" playsinline data-has-audio="true" data-start="1.3" data-duration="6.53" data-media-start="1.12" data-track-index="0" data-volume="1"></video>
+        </div>
+        <div id="z-yard" class="zoom" data-layout-allow-overflow>
+          <video id="yard" class="clip" src="assets/02_courtyard.mp4" playsinline data-has-audio="true" data-start="8.83" data-duration="3.75" data-media-start="1.7" data-track-index="0" data-volume="1"></video>
+        </div>
+        <div id="z-rec" class="zoom" data-layout-allow-overflow>
+          <video id="rec" class="clip" src="assets/03_record.mp4" playsinline data-has-audio="true" data-start="13.48" data-duration="2.8" data-media-start="1.75" data-track-index="0" data-volume="1"></video>
+        </div>
+        <div id="z-spk" class="zoom" data-layout-allow-overflow>
+          <video id="spk" class="clip" src="assets/04_speaker.mp4" playsinline data-has-audio="true" data-start="16.28" data-duration="2.9" data-media-start="1.9" data-track-index="0" data-volume="1"></video>
+        </div>
+        <div id="z-react" class="zoom" data-layout-allow-overflow>
+          <video id="react" class="clip" src="assets/05_react.mp4" playsinline data-has-audio="true" data-start="19.18" data-duration="4.15" data-media-start="0" data-track-index="0" data-volume="1"></video>
+        </div>
+        <div id="z-mom" class="zoom" data-layout-allow-overflow>
+          <video id="mom" class="clip" src="assets/06_mother.mp4" playsinline data-has-audio="true" data-start="24.13" data-duration="2.5" data-media-start="1.7" data-track-index="0" data-volume="1"></video>
+        </div>
+
+        <section id="title" class="clip card" data-start="0" data-duration="1.3" data-track-index="1">
+          <div class="rule" id="title-rule"></div>
+          <h2 class="en" id="title-word">KIRAYA</h2>
+          <p id="title-sub">एक रसीद की कहानी</p>
+        </section>
+        <section id="card-rent" class="clip card" data-start="7.83" data-duration="1" data-track-index="1">
+          <div class="rule" id="rent-rule"></div>
+          <h2 id="rent-word">किराया</h2>
+          <p id="rent-sub">रोक दिया गया</p>
+        </section>
+        <section id="card-slip" class="clip card" data-start="12.58" data-duration="0.9" data-track-index="1">
+          <div class="rule" id="slip-rule"></div>
+          <h2 id="slip-word">रसीद</h2>
+          <p id="slip-sub">माँगना मना है</p>
+        </section>
+        <section id="card-tomorrow" class="clip card" data-start="23.33" data-duration="0.8" data-track-index="1">
+          <div class="rule" id="tom-rule"></div>
+          <h2 id="tom-word">कल</h2>
+          <p id="tom-sub">रसीद ले लूँगा</p>
+        </section>
+        <section id="end" class="clip card" data-start="26.63" data-duration="1.2" data-track-index="1">
+          <div class="rule" id="end-rule"></div>
+          <h2 class="en" id="end-word">KIRAYA</h2>
+          <p id="end-sub">सच रिकॉर्ड में है</p>
+        </section>
+
+        <div id="cap-tea" class="clip cap" data-start="1.5" data-duration="5.9" data-track-index="2"><span id="cap-tea-t">जिस आदमी की माँ का<br>किराया रोका गया</span></div>
+        <div id="cap-yard" class="clip cap" data-start="9.05" data-duration="3.2" data-track-index="2"><span id="cap-yard-t">यहाँ सिर्फ किराया चलता है</span></div>
+        <div id="cap-rec" class="clip cap" data-start="13.7" data-duration="2.3" data-track-index="2"><span id="cap-rec-t">रसीद मत माँगना</span></div>
+        <div id="cap-spk" class="clip cap" data-start="16.5" data-duration="2.4" data-track-index="2"><span id="cap-spk-t">डिपाजिट मैंने रख लिया</span></div>
+        <div id="cap-react" class="clip cap" data-start="19.4" data-duration="3.5" data-track-index="2"><span id="cap-react-t">रसीद मत देना</span></div>
+        <div id="cap-mom" class="clip cap" data-start="24.3" data-duration="2.1" data-track-index="2"><span id="cap-mom-t">कल रसीद ले लूँगा</span></div>
+      </div>
+
+      <audio id="whoosh-1" src="assets/whoosh.mp3" data-start="1.3" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="whoosh-2" src="assets/whoosh.mp3" data-start="8.83" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="whoosh-3" src="assets/whoosh.mp3" data-start="13.48" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="whoosh-4" src="assets/whoosh.mp3" data-start="16.28" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="whoosh-5" src="assets/whoosh.mp3" data-start="19.18" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="whoosh-6" src="assets/whoosh.mp3" data-start="24.13" data-duration="0.45" data-track-index="3" data-volume="0.28"></audio>
+      <audio id="pop-1" src="assets/pop.mp3" data-start="7.83" data-duration="0.13" data-track-index="3" data-volume="0.45"></audio>
+      <audio id="pop-2" src="assets/pop.mp3" data-start="12.58" data-duration="0.13" data-track-index="3" data-volume="0.45"></audio>
+      <audio id="pop-3" src="assets/pop.mp3" data-start="23.33" data-duration="0.13" data-track-index="3" data-volume="0.45"></audio>
+      <audio
+        id="bed"
+        src="assets/bgm.mp3"
+        data-start="0"
+        data-duration="20"
+        data-track-index="4"
+        data-volume="1"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":0.07},{"t":20,"v":0.07}]}]}'
+      ></audio>
+      <audio
+        id="bed-2"
+        src="assets/bgm.mp3"
+        data-start="20"
+        data-duration="7.83"
+        data-track-index="4"
+        data-volume="1"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0.07},{"t":6.2,"v":0.07},{"t":7.83,"v":0}]}]}'
+      ></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const push = (id, at, dur, x) => {
+        tl.fromTo(id, { scale: 1.04, xPercent: 0 }, { scale: 1.14, xPercent: x, duration: dur, ease: "none" }, at);
+      };
+      push("#z-tea", 1.3, 6.53, -3);
+      push("#z-yard", 8.83, 3.75, 4);
+      push("#z-rec", 13.48, 2.8, 0);
+      push("#z-spk", 16.28, 2.9, -2);
+      push("#z-react", 19.18, 4.15, 3);
+      push("#z-mom", 24.13, 2.5, 0);
+
+      const slam = (word, rule, sub, at) => {
+        tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power3.out" }, at);
+        tl.fromTo(word, { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, at + 0.05);
+        tl.fromTo(sub, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, at + 0.16);
+      };
+      slam("#title-word", "#title-rule", "#title-sub", 0.08);
+      slam("#rent-word", "#rent-rule", "#rent-sub", 7.86);
+      slam("#slip-word", "#slip-rule", "#slip-sub", 12.6);
+      slam("#tom-word", "#tom-rule", "#tom-sub", 23.35);
+      slam("#end-word", "#end-rule", "#end-sub", 26.7);
+
+      ["#cap-tea-t", "#cap-yard-t", "#cap-rec-t", "#cap-spk-t", "#cap-react-t", "#cap-mom-t"].forEach((id, i) => {
+        const at = [1.5, 9.05, 13.7, 16.5, 19.4, 24.3][i];
+        tl.fromTo(id, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "power2.out" }, at);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

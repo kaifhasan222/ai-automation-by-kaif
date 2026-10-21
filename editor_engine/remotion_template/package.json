@@ -1,0 +1,25 @@
+{
+  "name": "remotion_template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gemini-style 9:16 Remotion template for AI Kaif reels",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts GeminiReelPreview out/reel.mp4",
+    "render:full": "remotion render src/index.ts GeminiReel out/reel_full.mp4",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.314",
+    "@remotion/media-utils": "^4.0.314",
+    "@remotion/renderer": "^4.0.314",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.314"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.6.3"
+  }
+}

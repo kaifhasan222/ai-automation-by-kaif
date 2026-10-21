@@ -1,0 +1,12 @@
+{
+  "avatar_video": "assets/avatars/kaif_avatar.mp4",
+  "avatar_photo": "assets/avatars/kaif_photo.jpg",
+  "voice_raw": "assets/voice_samples/kaif_raw.mp3",
+  "voice_ref": "assets/voice_samples/kaif_ref.wav",
+  "owner": "kaifhasan222",
+  "notes": {
+    "video": "Photo-based 9:16 avatar + own voice (Ken Burns). Real lip-sync later on Modal.",
+    "voice": "~48s cleaned mono WAV for future cloning",
+    "source_photo": "__reference/kaifphoto.jpg"
+  }
+}

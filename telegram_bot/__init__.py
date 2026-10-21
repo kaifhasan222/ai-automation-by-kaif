@@ -1,0 +1,1 @@
+"""Telegram approve/reject controller for the daily video factory."""

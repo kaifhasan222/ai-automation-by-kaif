@@ -16,30 +16,24 @@ class AssetPack:
 
     def missing(self) -> list[str]:
         out: list[str] = []
-        for label, path in (
-            ("avatar_video", self.avatar_video),
-            ("avatar_photo", self.avatar_photo),
-            ("voice_raw", self.voice_raw),
-            ("voice_ref", self.voice_ref),
-        ):
-            if not path.exists():
-                out.append(label)
+        if not self.avatar_photo.exists():
+            out.append("avatar_photo")
         return out
 
     def summary_html(self) -> str:
         miss = self.missing()
         status = "✅ ready" if not miss else f"⚠️ missing: {', '.join(miss)}"
+        has_voice = self.voice_ref.exists() or self.voice_raw.exists()
         return (
             "🗂️ <b>Your assets</b>\n\n"
             f"Status: {status}\n"
-            f"• Video: <code>{self.avatar_video.name}</code>\n"
-            f"• Photo: <code>{self.avatar_photo.name}</code>\n"
-            f"• Voice ref: <code>{self.voice_ref.name}</code>\n\n"
-            "Format notes:\n"
-            "• Avatar: photo-based 9:16 + your voice ✅\n"
-            "• Voice sample: ~48s cleaned WAV ✅\n"
-            "• Commands: /reel (Remotion) · /demo (simple)\n"
-            "• Real lip-sync avatar: Modal GPU later"
+            f"• Studio Photo: <code>{self.avatar_photo.name}</code> (✅ Loaded)\n"
+            f"• Voice reference: {'✅ Custom WAV' if has_voice else '⚡ Free TTS active'}\n"
+            f"• Visual Style: 9:16 Tech Studio Set (kaif_tech_news_set.jpg)\n\n"
+            "Commands:\n"
+            "• /hyper_reel (Studio Photo + Motion Cards + SFX + HyperFrames)\n"
+            "• /reel (Remotion/Hedra)\n"
+            "• /script (AI Script Research)\n"
         )
 
 

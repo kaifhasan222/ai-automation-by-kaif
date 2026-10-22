@@ -25,6 +25,8 @@ from telegram.ext import (
 )
 from telegram.request import HTTPXRequest
 
+import uuid
+
 from orchestrator.assets import load_assets
 from orchestrator.config import ROOT, Settings, get_settings
 from orchestrator.free_render import compress_for_telegram, render_free_demo, synthesize_tts
@@ -33,6 +35,8 @@ from orchestrator.hedra_client import create_talking_video, hedra_configured
 from orchestrator.heygen_client import heygen_configured, create_avatar_video
 from orchestrator.animated_reel import generate_animated_script, render_animated
 from orchestrator.remotion_bridge import render_remotion_reel
+from orchestrator.scene_generator import generate_scene_pack
+from orchestrator.hyperframes_composer import build_hyperframes_html, render_hyperframes_mp4
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
@@ -44,6 +48,7 @@ COMMANDS: dict[str, str] = {
     "start": "Welcome + main menu",
     "help": "Saari commands + tips",
     "menu": "Keyboard buttons dikhao",
+    "hyper": "Studio Photo + HyperFrames Reel",
     "script": "Free AI se reel script banao",
     "demo": "Simple face + TTS video",
     "reel": "Gemini-style Remotion reel",
@@ -58,6 +63,7 @@ COMMANDS: dict[str, str] = {
 
 # Button label -> command
 BUTTON_MAP: dict[str, str] = {
+    "🔥 Hyper Reel": "hyper",
     "🎬 New Script": "script",
     "✨ Gemini Reel": "reel",
     "🎞️ Animate": "animate",
@@ -74,15 +80,15 @@ BUTTON_MAP: dict[str, str] = {
 def main_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         [
-            [KeyboardButton("🎞️ Animate"), KeyboardButton("🎬 New Script")],
-            [KeyboardButton("✨ Gemini Reel")],
+            [KeyboardButton("🔥 Hyper Reel"), KeyboardButton("🎬 New Script")],
+            [KeyboardButton("✨ Gemini Reel"), KeyboardButton("🎞️ Animate")],
             [KeyboardButton("🎥 Simple Demo"), KeyboardButton("📱 Review Preview")],
             [KeyboardButton("🗂️ My Assets"), KeyboardButton("📡 Status")],
             [KeyboardButton("❓ Help"), KeyboardButton("🏓 Ping")],
         ],
         resize_keyboard=True,
         is_persistent=True,
-        input_field_placeholder="Type /reel or tap a button…",
+        input_field_placeholder="Tap 🔥 Hyper Reel or /script…",
     )
 
 
@@ -337,6 +343,80 @@ async def cmd_animate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         reply_markup=review_keyboard(),
     )
     await status.edit_text("✅ Animated reel ready.", parse_mode=ParseMode.HTML)
+
+
+async def cmd_hyper(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Zero-Cost Studio Photo + HyperFrames Reel generator."""
+    if not await _guard(update, context) or not update.message:
+        return
+    settings: Settings = context.bot_data["settings"]
+    hint = " ".join(context.args).strip() if context.args else None
+
+    status = await update.message.reply_text(
+        "🔥 <b>HyperFrames Studio Reel</b>\n"
+        "1️⃣ AI Script Research\n"
+        "2️⃣ Studio Avatar clips (kaif_tech_news_set.jpg)\n"
+        "3️⃣ Motion Cards + Mesh Glow + SFX\n"
+        "<i>Zero-cost processing…</i>",
+        parse_mode=ParseMode.HTML,
+    )
+    stop = asyncio.Event()
+    typer = asyncio.create_task(_typing_loop(update, context, stop))
+    try:
+        topic = hint or settings.content_niche
+        data = await generate_animated_script(settings, topic)
+        title = str(data.get("title") or topic)
+        scenes = data.get("scenes") or []
+        if len(scenes) < 3:
+            raise RuntimeError("Script missing scenes")
+
+        await status.edit_text(
+            f"✍️ <b>{escape(title)}</b>\n📸 Generating Studio Avatar Clips…",
+            parse_mode=ParseMode.HTML,
+        )
+
+        job_id = uuid.uuid4().hex[:8]
+        work_dir = ROOT / "outputs" / f"hyper_{job_id}"
+        clips = await generate_scene_pack(scenes, work_dir)
+
+        await status.edit_text(
+            f"🎬 <b>{escape(title)}</b>\n✨ HyperFrames Motion & SFX Rendering…",
+            parse_mode=ParseMode.HTML,
+        )
+
+        html_file = work_dir / "index.html"
+        build_hyperframes_html(clips=clips, title=title, kicker="NEW KAIF AI", out_html=html_file)
+
+        output_mp4 = work_dir / "kaif_reel.mp4"
+        await asyncio.to_thread(render_hyperframes_mp4, clips=clips, output_mp4=output_mp4, title=title)
+
+        context.bot_data["last_video_path"] = str(output_mp4)
+        stop.set()
+        await typer
+
+        caption = (
+            f"🔥 <b>{escape(title)}</b>\n\n"
+            f"📸 Studio Avatar: kaif_tech_news_set.jpg\n"
+            f"⚡ Engine: HyperFrames + Kinetic Cards + SFX\n\n"
+            f"{escape(str(data.get('caption') or ''))}"
+        )[:950]
+
+        await _send_video_resilient(
+            update,
+            context,
+            output_mp4,
+            caption=caption,
+            reply_markup=review_keyboard(),
+        )
+        await status.edit_text("✅ HyperFrames Reel ready!", parse_mode=ParseMode.HTML)
+    except Exception as exc:
+        stop.set()
+        await typer
+        log.exception("cmd_hyper failed")
+        await status.edit_text(
+            f"❌ Hyper Reel fail:\n<code>{escape(str(exc)[:600])}</code>",
+            parse_mode=ParseMode.HTML,
+        )
 
 
 async def cmd_reel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -1129,6 +1209,7 @@ def build_app(settings: Settings | None = None) -> Application:
     app.add_handler(CommandHandler("status", cmd_status))
     app.add_handler(CommandHandler("script", cmd_script))
     app.add_handler(CommandHandler("demo", cmd_demo))
+    app.add_handler(CommandHandler("hyper", cmd_hyper))
     app.add_handler(CommandHandler("reel", cmd_reel))
     app.add_handler(CommandHandler("animate", cmd_animate))
     app.add_handler(CommandHandler("resend", cmd_resend))

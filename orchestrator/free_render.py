@@ -81,7 +81,16 @@ async def synthesize_tts(script: str, out_mp3: Path, voice: str = "hi-IN-MadhurN
         if out_mp3.exists() and out_mp3.stat().st_size > 1000:
             return out_mp3
     except Exception as exc:  # noqa: BLE001
-        print(f"edge-tts unavailable ({exc!r}), falling back to macOS say")
+        print(f"edge-tts unavailable ({exc!r}), falling back to gTTS")
+
+    try:
+        from gtts import gTTS
+
+        gTTS(script, lang="hi").save(str(out_mp3))
+        if out_mp3.exists() and out_mp3.stat().st_size > 1000:
+            return out_mp3
+    except Exception as exc:  # noqa: BLE001
+        print(f"gTTS unavailable ({exc!r}), falling back to macOS say")
 
     mac_voice = _pick_macos_voice()
     return await asyncio.to_thread(_macos_say_tts, script, out_mp3, mac_voice)
